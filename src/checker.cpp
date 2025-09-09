@@ -95,7 +95,7 @@ void Checker::getresultzip()
     for (int id = 1; id <= _proj.tasks.size(); ++id)
     {
         int num = _proj.tasks["Task" + std::to_string(id)].nums;
-        SafeString out = _dir.get_dir("test\\Task" + std::to_string(id) + ".hash");
+        SafeString out = _dir.get_dir("test\\Task" + std::to_string(id) + ".out");
         SafeOfstream wt(out);
         wt << gettaskhash(id, num);
         wt.close();
