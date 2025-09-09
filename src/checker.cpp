@@ -156,6 +156,10 @@ void Checker::run()
                     single(id, _proj.tasks["Task" + command].nums);
                 }
             }
+            else
+            {
+                std::cout << "不要乱输入东西哦！" << std::endl;
+            }
         }
     }
 }
