@@ -71,23 +71,7 @@ template <typename T> std::vector<std::string> split(T &&s, char dot = '.')
 class Test_File_RW
 {
   public:
-    Test_File_RW(int task_id, int times, std::function<void()> f)
-    {
-        for (int i = 1; i <= times; ++i)
-        {
-            std::string in = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(i) + ".in";
-            std::string out = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(i) + ".out";
-            std::ifstream fin(in);
-            std::ofstream fout(out);
-            auto cin_buf = std::cin.rdbuf();
-            auto cout_buf = std::cout.rdbuf();
-            std::cin.rdbuf(fin.rdbuf());
-            std::cout.rdbuf(fout.rdbuf());
-            f();
-            std::cin.rdbuf(cin_buf);
-            std::cout.rdbuf(cout_buf);
-        }
-    }
+    Test_File_RW(int task_id, int times, std::function<void()> f);
     static std::string GetOutput(int task_id)
     {
         std::string out = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(task_id) + ".out";
@@ -126,6 +110,24 @@ int main(int argc, char *argv[])
     for (const auto &item : args)
     {
         test(item);
+    }
+}
+
+Test_File_RW::Test_File_RW(int task_id, int times, std::function<void()> f)
+{
+    for (int i = 1; i <= times; ++i)
+    {
+        std::string in = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(i) + ".in";
+        std::string out = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(i) + ".out";
+        std::ifstream fin(in);
+        std::ofstream fout(out);
+        auto cin_buf = std::cin.rdbuf();
+        auto cout_buf = std::cout.rdbuf();
+        std::cin.rdbuf(fin.rdbuf());
+        std::cout.rdbuf(fout.rdbuf());
+        f();
+        std::cin.rdbuf(cin_buf);
+        std::cout.rdbuf(cout_buf);
     }
 }
 
