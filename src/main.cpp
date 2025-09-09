@@ -1,0 +1,76 @@
+#include "../include/checker.h"
+#include "../include/compile.hpp"
+#include "../include/config.h"
+#include "../include/win_safe_string.hpp"
+#include <iostream>
+#include <thread>
+
+int main()
+{
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    std::cout << "输入你的工作目录：";
+    Filesys::WorkingDir dir;
+    dir.getline(std::cin);
+    std::cout << std::endl;
+
+    std::cout << "检查配置文件......" << std::endl;
+    Config conf(dir, "config.json"_ss);
+    conf.init();
+    auto q = conf.getproject();
+    std::cout << "配置文件检查通过！" << std::endl << std::endl;
+
+    auto compiler = q.Compiler;
+    if (q.Compiler == "find"_ss)
+    {
+        std::cout << "配置文件未指定编译器，正在获取......" << std::endl;
+        q.Compiler = get_compiler();
+        std::cout << "编译器获取成功！" << std::endl << std::endl;
+    }
+
+    std::cout << "检查源文件文件列表......" << std::endl;
+    for (const auto &item : q.Filelist)
+    {
+        Filesys::exists(dir.get_dir(item));
+    }
+    std::cout << "源文件列表检查通过！" << std::endl << std::endl;
+
+    std::cout << "检查测试点数据......" << std::endl;
+    for (auto &[k, v] : q.tasks)
+    {
+        Filesys::exists(dir.get_dir("test\\" + k.str()));
+        if (v.nums == 1)
+        {
+            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + k.back() + ".ans"));
+            continue;
+        }
+        for (int i = 1; i <= v.nums; ++i)
+        {
+            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\"_ss + std::to_string(i) + ".in"));
+            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\"_ss + std::to_string(i) + ".ans"));
+        }
+    }
+    std::cout << "测试点数据检查通过！" << std::endl << std::endl;
+
+    std::cout << "尝试编译checker.cpp......" << std::endl;
+    Compiler cp(q);
+    for (const auto &item : cp.Compile(dir))
+    {
+        if (item.exit_code != 0)
+        {
+            std::cout << "编译失败！请根据错误提示修改代码！" << std::endl << std::endl;
+            std::cout << item.error << std::endl;
+            std::cout << "按任意键退出程序" << std::endl;
+            system("pause>nul");
+        }
+        else
+        {
+            std::cout << "编译成功！3秒后进入检查页面......" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            system("cls");
+            Checker{dir, q}.run();
+        }
+    }
+    system("pause>nul");
+}
