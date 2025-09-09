@@ -117,7 +117,8 @@ void Checker::getresultzip()
 
 void Checker::run()
 {
-    std::cout << "指令：" << "1.输入单个数字表示单次测试（例如想要测试Task1，输入1即可)" << std::endl
+    std::cout << "指令：" << std::endl
+              << "1.输入单个数字表示单次测试（例如想要测试Task1，输入1即可)" << std::endl
               << "2.输入all表示测试所有的测试点" << std::endl
               << "3.输入exit退出程序" << std::endl
               << std::endl;
