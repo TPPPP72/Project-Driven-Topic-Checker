@@ -95,7 +95,6 @@ class Test_File_RW
     }
 };
 
-void createdir(const std::string &dir);
 void test(const std::string &arg);
 
 std::vector<std::function<void(int)>> tasks;
@@ -201,3 +200,4 @@ void test(const std::string &arg)
 }
 
 ```
+
