@@ -187,16 +187,6 @@ class SafeString
     std::string _data;
 };
 
-inline SafeString operator""_ss(const char *str, std::size_t len)
-{
-    return SafeString(std::string(str, len));
-}
-
-inline SafeString operator""_ss(const wchar_t *str, std::size_t len)
-{
-    return SafeString(std::wstring(str, len));
-}
-
 namespace std
 {
 template <> struct hash<SafeString>

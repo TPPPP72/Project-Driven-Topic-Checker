@@ -19,7 +19,7 @@ class Compiler
         std::unordered_map<SafeString, std::vector<SafeString>> map = {{"Compiler", {_proj.Compiler}},
                                                                        {"FileList", _proj.Filelist},
                                                                        {"Flag", {_proj.Flag}},
-                                                                       {"checker", {"checker.exe"_ss}}};
+                                                                       {"checker", {"checker.exe"}}};
 
         std::vector<Win32::Process::ProcessResult> result;
         for (auto &item : _proj.CClist)

@@ -66,7 +66,7 @@ std::pair<SafeString, std::vector<SafeString>> substitute_placeholders_with_args
         auto it = replacements.find(lookup_key);
         if (it != replacements.end())
         {
-            if (key == "Compiler"_ss)
+            if (key == "Compiler")
             {
                 if constexpr (std::is_same_v<V, std::vector<SafeString>>)
                     for (const auto &item : it->second)
@@ -119,5 +119,5 @@ template <typename T> class Config
     Project _proj;
 };
 
-Config(const SafeString &, const SafeString &) -> Config<SafeString>;
-Config(const SafeString &, const std::wstring &) -> Config<SafeString>;
+template <typename Path>
+Config(const Filesys::WorkingDir&, const Path&) -> Config<SafeString>;

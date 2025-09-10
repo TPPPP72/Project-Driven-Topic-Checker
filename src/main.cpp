@@ -16,13 +16,13 @@ int main()
     std::cout << std::endl;
 
     std::cout << "检查配置文件......" << std::endl;
-    Config conf(dir, "config.json"_ss);
+    Config conf(dir, "config.json");
     conf.init();
     auto q = conf.getproject();
     std::cout << "配置文件检查通过！" << std::endl << std::endl;
 
     auto compiler = q.Compiler;
-    if (q.Compiler == "find"_ss)
+    if (q.Compiler == "find")
     {
         std::cout << "配置文件未指定编译器，正在获取......" << std::endl;
         q.Compiler = get_compiler();
@@ -47,8 +47,8 @@ int main()
         }
         for (int i = 1; i <= v.nums; ++i)
         {
-            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\"_ss + std::to_string(i) + ".in"));
-            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\"_ss + std::to_string(i) + ".ans"));
+            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".in"));
+            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".ans"));
         }
     }
     std::cout << "测试点数据检查通过！" << std::endl << std::endl;
