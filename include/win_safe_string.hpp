@@ -24,7 +24,7 @@ class SafeString
     {
         _data = s;
     }
-    
+
     SafeString(char c)
     {
         _data = c;
@@ -45,7 +45,8 @@ class SafeString
         return _data.size();
     }
 
-    operator const char *() const{
+    operator const char *() const
+    {
         return _data.c_str();
     }
 
@@ -54,7 +55,8 @@ class SafeString
         return _data;
     }
 
-    operator std::string() const{
+    operator std::string() const
+    {
         return _data;
     }
 
@@ -63,7 +65,8 @@ class SafeString
         return utf8_to_wstring(_data);
     }
 
-    operator std::wstring() const{
+    operator std::wstring() const
+    {
         return this->wstr();
     }
 

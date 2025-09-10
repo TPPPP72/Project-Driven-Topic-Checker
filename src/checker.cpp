@@ -1,9 +1,10 @@
 #include "../include/checker.h"
+#include "../include/compile.hpp"
 #include "../include/filesys.hpp"
 #include "../include/miniz.h"
 #include "../include/process.hpp"
-#include "../include/compile.hpp"
 #include <iostream>
+
 
 void Checker::single(int id, int num)
 {
@@ -11,10 +12,11 @@ void Checker::single(int id, int num)
     Win32::Process process;
     process.run_cmd(_dir, _dir.get_dir("checker.exe"), {std::format("Task{}_{}", id, num)});
     std::vector<std::pair<SafeString, SafeString>> check_path;
-    for (int i = 1; i <= num; ++i) {
-      std::string out{_dir.get_dir(std::format("test\\Task{}\\{}.out", id, i))};
-      std::string ans{_dir.get_dir(std::format("test\\Task{}\\{}.ans", id, i))};
-      check_path.emplace_back(std::make_pair(out, ans));
+    for (int i = 1; i <= num; ++i)
+    {
+        std::string out{_dir.get_dir(std::format("test\\Task{}\\{}.out", id, i))};
+        std::string ans{_dir.get_dir(std::format("test\\Task{}\\{}.ans", id, i))};
+        check_path.emplace_back(std::make_pair(out, ans));
     }
     if (hashcheck(check_path))
     {
@@ -60,9 +62,9 @@ void Checker::all()
 std::string Checker::gettaskhash(int id, int num)
 {
     std::vector<SafeString> out_path;
-    for (int i = 1; i <= num; ++i) {
-      out_path.emplace_back(
-          _dir.get_dir(std::format("test\\Task{}\\{}.out", id, i)));
+    for (int i = 1; i <= num; ++i)
+    {
+        out_path.emplace_back(_dir.get_dir(std::format("test\\Task{}\\{}.out", id, i)));
     }
     std::string hash_data;
     for (const auto &item : out_path)
@@ -116,16 +118,20 @@ void Checker::run()
         {
             all();
         }
-        else if( command == "compile" ){
-          for (const auto &item : Compiler{_proj}.run(_dir)) {
-            if (item.exit_code != 0) {
-              std::cout << "编译失败！请根据错误提示修改代码！" << std::endl
-                        << std::endl;
-              std::cout << item.error << std::endl << std::endl ;
-            } else {
-              std::cout << "编译成功！" << std::endl << std::endl;
+        else if (command == "compile")
+        {
+            for (const auto &item : Compiler{_proj}.run(_dir))
+            {
+                if (item.exit_code != 0)
+                {
+                    std::cout << "编译失败！请根据错误提示修改代码！" << std::endl << std::endl;
+                    std::cout << item.error << std::endl << std::endl;
+                }
+                else
+                {
+                    std::cout << "编译成功！" << std::endl << std::endl;
+                }
             }
-          }
         }
         else if (command == "exit")
         {

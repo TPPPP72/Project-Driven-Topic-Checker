@@ -7,8 +7,8 @@ class Checker
   public:
     Checker(const Filesys::WorkingDir &dir, const Project &p)
     {
-      _dir = dir;
-      _proj = p;
+        _dir = dir;
+        _proj = p;
     }
     void run();
 

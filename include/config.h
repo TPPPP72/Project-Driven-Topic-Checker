@@ -122,5 +122,4 @@ template <typename T> class Config
     Project _proj;
 };
 
-template <typename Path>
-Config(const Filesys::WorkingDir&, const Path&) -> Config<SafeString>;
+template <typename Path> Config(const Filesys::WorkingDir &, const Path &) -> Config<SafeString>;

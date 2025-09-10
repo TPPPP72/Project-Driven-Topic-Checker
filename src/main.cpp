@@ -42,7 +42,8 @@ int main()
         Filesys::exists(dir.get_dir("test\\" + k.str()));
         for (int i = 1; i <= v.nums; ++i)
         {
-            if(v.has_input){
+            if (v.has_input)
+            {
                 Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".in"));
             }
             Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".ans"));

@@ -23,32 +23,32 @@ class Process
         return _createprocess(cmd_line);
     }
 
-    Result run_cmd(const Filesys::WorkingDir &dir, const SafeString &path,
-                              const std::vector<SafeString> &args)
+    Result run_cmd(const Filesys::WorkingDir &dir, const SafeString &path, const std::vector<SafeString> &args)
     {
         std::wstring cmd_line{_make_command_line(path, args)};
-        return _createprocess(cmd_line,dir.get_root());
+        return _createprocess(cmd_line, dir.get_root());
     }
 
   private:
-    SafeString _make_command_line(const SafeString &exe,
-                                 const std::vector<SafeString> &args) {
-      std::string result;
-      auto add_quote = [](const std::string &str) {
-        std::string res = str;
-        if (str.find(" ") != std::string::npos &&
-            str.find("\\") != std::string::npos &&
-            str.find(".") != std::string::npos) {
-          res = '\"' + str + '\"';
+    SafeString _make_command_line(const SafeString &exe, const std::vector<SafeString> &args)
+    {
+        std::string result;
+        auto add_quote = [](const std::string &str) {
+            std::string res = str;
+            if (str.find(" ") != std::string::npos && str.find("\\") != std::string::npos &&
+                str.find(".") != std::string::npos)
+            {
+                res = '\"' + str + '\"';
+            }
+            return res;
+        };
+        result += add_quote(exe.str());
+        for (const auto &item : args)
+        {
+            result += ' ';
+            result += add_quote(item.str());
         }
-        return res;
-      };
-      result += add_quote(exe.str());
-      for (const auto &item : args) {
-        result += ' ';
-        result += add_quote(item.str());
-      }
-      return result;
+        return result;
     }
 
     SafeString _read_pipe(HANDLE pipe)
@@ -69,7 +69,8 @@ class Process
         return result;
     }
 
-    Result _createprocess(std::wstring &command_line,std::wstring env=L""){
+    Result _createprocess(std::wstring &command_line, std::wstring env = L"")
+    {
         SECURITY_ATTRIBUTES sa{};
         sa.nLength = sizeof(sa);
         sa.bInheritHandle = TRUE;
@@ -93,10 +94,15 @@ class Process
         PROCESS_INFORMATION pi{};
 
         BOOL success;
-        if(env.empty()){
-            success = CreateProcessW(nullptr, command_line.data(), nullptr, nullptr, TRUE, 0, nullptr, nullptr, &si, &pi);
-        }else{
-            success = CreateProcessW(nullptr, command_line.data(), nullptr, nullptr, TRUE, 0, nullptr, env.c_str(), &si, &pi);
+        if (env.empty())
+        {
+            success =
+                CreateProcessW(nullptr, command_line.data(), nullptr, nullptr, TRUE, 0, nullptr, nullptr, &si, &pi);
+        }
+        else
+        {
+            success =
+                CreateProcessW(nullptr, command_line.data(), nullptr, nullptr, TRUE, 0, nullptr, env.c_str(), &si, &pi);
         }
 
         CloseHandle(stdoutWrite);
