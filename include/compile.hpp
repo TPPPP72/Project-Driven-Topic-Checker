@@ -67,7 +67,8 @@ inline SafeString get_compiler()
 {
     auto exists_in_path = [](const SafeString &exe) {
         wchar_t buffer[MAX_PATH];
-        return SearchPathW(nullptr, exe, L".exe", MAX_PATH, buffer, nullptr) > 0;
+        std::wstring s{exe.wstr()};
+        return SearchPathW(nullptr, s.c_str(), L".exe", MAX_PATH, buffer, nullptr) > 0;
     };
 
     std::vector<SafeString> candidates;

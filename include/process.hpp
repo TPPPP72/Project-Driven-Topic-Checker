@@ -1,6 +1,5 @@
 #pragma once
 #include "filesys.hpp"
-#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -46,7 +45,7 @@ class Process
         si.hStdError = stderrWrite;
         si.hStdInput = NULL;
 
-        std::wstring s{make_command_line(path, args)};
+        std::wstring s{make_command_line(path, args).wstr()};
 
         success = CreateProcessW(nullptr, s.data(), nullptr, nullptr, TRUE, 0, nullptr, nullptr, &si, &pi);
 
@@ -98,7 +97,7 @@ class Process
 
         PROCESS_INFORMATION pi{};
 
-        std::wstring s{make_command_line(path, args)};
+        std::wstring s{make_command_line(path, args).wstr()};
 
         std::wstring env{SafeString::utf8_to_wstring(dir.get_root().str())};
 

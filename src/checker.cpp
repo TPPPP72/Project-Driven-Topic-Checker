@@ -2,6 +2,7 @@
 #include "../include/filesys.hpp"
 #include "../include/miniz.h"
 #include "../include/process.hpp"
+#include "../include/compile.hpp"
 #include <iostream>
 
 void Checker::single(int id, int num)
@@ -120,7 +121,8 @@ void Checker::run()
     std::cout << "指令：" << std::endl
               << "1.输入单个数字表示单次测试（例如想要测试Task1，输入1即可)" << std::endl
               << "2.输入all表示测试所有的测试点" << std::endl
-              << "3.输入exit退出程序" << std::endl
+              << "3.输入compile重新编译程序" << std::endl
+              << "4.输入exit退出程序" << std::endl
               << std::endl;
     while (true)
     {
@@ -130,6 +132,17 @@ void Checker::run()
         if (command == "all")
         {
             all();
+        }
+        else if( command == "compile" ){
+          for (const auto &item : Compiler{_proj}.run(_dir)) {
+            if (item.exit_code != 0) {
+              std::cout << "编译失败！请根据错误提示修改代码！" << std::endl
+                        << std::endl;
+              std::cout << item.error << std::endl << std::endl ;
+            } else {
+              std::cout << "编译成功！" << std::endl << std::endl;
+            }
+          }
         }
         else if (command == "exit")
         {

@@ -9,14 +9,14 @@ class SafeString
   public:
     SafeString() = default;
 
-    SafeString(const std::wstring &str) : _wdata(str)
+    SafeString(const std::wstring &str)
     {
         _data = wstring_to_utf8(str);
     }
 
-    SafeString(const std::string &str) : _data(str)
+    SafeString(const std::string &str)
     {
-        _wdata = utf8_to_wstring(str);
+        _data = str;
     }
 
     SafeString(const char *s) : _data(s)
@@ -41,10 +41,6 @@ class SafeString
         return _data.size();
     }
 
-    operator const wchar_t *() const
-    {
-        return _wdata.c_str();
-    }
     operator const char *() const
     {
         return _data.c_str();
@@ -55,9 +51,9 @@ class SafeString
         return _data;
     }
 
-    const std::wstring &wstr() const
+    std::wstring wstr() const
     {
-        return _wdata;
+        return utf8_to_wstring(_data);
     }
 
     auto empty() const
@@ -72,13 +68,12 @@ class SafeString
 
     std::filesystem::path path() const
     {
-        return std::filesystem::path(_wdata);
+        return std::filesystem::path(utf8_to_wstring(_data));
     }
 
     SafeString &operator+=(const SafeString &rhs)
     {
         _data += rhs._data;
-        _wdata += rhs._wdata;
         return *this;
     }
 
@@ -93,7 +88,6 @@ class SafeString
     {
         SafeString result;
         result._data = _data.substr(pos, count);
-        result._wdata = utf8_to_wstring(result._data);
         return result;
     }
 
@@ -114,7 +108,7 @@ class SafeString
 
     friend bool operator==(const char *lhs, const SafeString &rhs)
     {
-        return lhs == rhs.str();
+        return lhs == rhs;
     }
 
     bool operator<(const SafeString &rhs) const
@@ -191,7 +185,6 @@ class SafeString
 
   private:
     std::string _data;
-    std::wstring _wdata;
 };
 
 inline SafeString operator""_ss(const char *str, std::size_t len)
