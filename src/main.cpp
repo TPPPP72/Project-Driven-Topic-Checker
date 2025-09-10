@@ -22,7 +22,7 @@ int main()
     std::cout << "配置文件检查通过！" << std::endl << std::endl;
 
     auto compiler = q.Compiler;
-    if (q.Compiler == "find")
+    if (q.Compiler.empty())
     {
         std::cout << "配置文件未指定编译器，正在获取......" << std::endl;
         q.Compiler = get_compiler();
@@ -40,14 +40,11 @@ int main()
     for (auto &[k, v] : q.tasks)
     {
         Filesys::exists(dir.get_dir("test\\" + k.str()));
-        if (v.nums == 1)
-        {
-            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + k.back() + ".ans"));
-            continue;
-        }
         for (int i = 1; i <= v.nums; ++i)
         {
-            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".in"));
+            if(v.has_input){
+                Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".in"));
+            }
             Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".ans"));
         }
     }

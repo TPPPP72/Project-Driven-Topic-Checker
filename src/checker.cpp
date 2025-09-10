@@ -11,20 +11,10 @@ void Checker::single(int id, int num)
     Win32::Process process;
     process.run_cmd(_dir, _dir.get_dir("checker.exe"), {std::format("Task{}_{}", id, num)});
     std::vector<std::pair<SafeString, SafeString>> check_path;
-    if (num == 1)
-    {
-        std::string out{_dir.get_dir(std::format("test\\Task{}\\{}.out", id, id))};
-        std::string ans{_dir.get_dir(std::format("test\\Task{}\\{}.ans", id, id))};
-        check_path.emplace_back(std::make_pair(out, ans));
-    }
-    else
-    {
-        for (int i = 1; i <= num; ++i)
-        {
-            std::string out{_dir.get_dir(std::format("test\\Task{}\\{}.out", id, i))};
-            std::string ans{_dir.get_dir(std::format("test\\Task{}\\{}.ans", id, i))};
-            check_path.emplace_back(std::make_pair(out, ans));
-        }
+    for (int i = 1; i <= num; ++i) {
+      std::string out{_dir.get_dir(std::format("test\\Task{}\\{}.out", id, i))};
+      std::string ans{_dir.get_dir(std::format("test\\Task{}\\{}.ans", id, i))};
+      check_path.emplace_back(std::make_pair(out, ans));
     }
     if (hashcheck(check_path))
     {
@@ -70,16 +60,9 @@ void Checker::all()
 std::string Checker::gettaskhash(int id, int num)
 {
     std::vector<SafeString> out_path;
-    if (num == 1)
-    {
-        out_path.emplace_back(_dir.get_dir(std::format("test\\Task{}\\{}.out", id, id)));
-    }
-    else
-    {
-        for (int i = 1; i <= num; ++i)
-        {
-            out_path.emplace_back(_dir.get_dir(std::format("test\\Task{}\\{}.out", id, i)));
-        }
+    for (int i = 1; i <= num; ++i) {
+      out_path.emplace_back(
+          _dir.get_dir(std::format("test\\Task{}\\{}.out", id, i)));
     }
     std::string hash_data;
     for (const auto &item : out_path)

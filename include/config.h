@@ -8,6 +8,7 @@
 struct Task
 {
     int nums;
+    bool has_input;
 };
 
 struct Project
@@ -97,8 +98,10 @@ std::pair<SafeString, std::vector<SafeString>> substitute_placeholders_with_args
 template <typename T> class Config
 {
   public:
-    Config(const Filesys::WorkingDir &dir, const T &path) : _path(path), _dir(dir)
+    Config(const Filesys::WorkingDir &dir, const T &path)
     {
+        _path = path;
+        _dir = dir;
     }
     void init()
     {
