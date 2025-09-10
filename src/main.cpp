@@ -54,8 +54,7 @@ int main()
     std::cout << "测试点数据检查通过！" << std::endl << std::endl;
 
     std::cout << "尝试编译checker.cpp......" << std::endl;
-    Compiler cp(q);
-    for (const auto &item : cp.Compile(dir))
+    for (const auto &item : Compiler{q}.run(dir))
     {
         if (item.exit_code != 0)
         {

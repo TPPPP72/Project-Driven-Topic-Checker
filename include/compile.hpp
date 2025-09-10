@@ -14,7 +14,7 @@ class Compiler
     Compiler(const Project &p) : _proj(p)
     {
     }
-    std::vector<Win32::Process::ProcessResult> Compile(const Filesys::WorkingDir &dir)
+    std::vector<Win32::Process::ProcessResult> run(const Filesys::WorkingDir &dir)
     {
         std::unordered_map<SafeString, std::vector<SafeString>> map = {{"Compiler", {_proj.Compiler}},
                                                                        {"FileList", _proj.Filelist},
@@ -51,7 +51,6 @@ class Compiler
                     args.emplace_back(str);
                 }
             }
-            std::cout << "工作目录：" << dir.get_root() << std::endl;
             std::cout << "编译命令：" << Win32::Process::make_command_line(_proj.Compiler, args) << std::endl;
             auto cmd_res = _process.run_cmd_env(dir, _proj.Compiler, args);
             result.emplace_back(cmd_res);
@@ -82,17 +81,17 @@ inline SafeString get_compiler()
         }
     }
 
-    std::vector<SafeString> common_paths;
-    common_paths.insert(common_paths.end(), {"C:\\msys64\\ucrt64\\bin\\g++.exe",
-                                             "C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\g++.exe"});
+    // std::vector<SafeString> common_paths;
+    // common_paths.insert(common_paths.end(), {"C:\\msys64\\ucrt64\\bin\\g++.exe",
+    //                                          "C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\g++.exe"});
 
-    for (const auto &path : common_paths)
-    {
-        if (std::filesystem::exists(path))
-        {
-            return path;
-        }
-    }
+    // for (const auto &path : common_paths)
+    // {
+    //     if (std::filesystem::exists(path))
+    //     {
+    //         return path;
+    //     }
+    // }
 
     throw std::runtime_error("Compiler not found, please set config.json");
 }
