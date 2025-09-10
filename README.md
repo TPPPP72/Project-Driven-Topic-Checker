@@ -133,10 +133,6 @@ Test_File_RW::Test_File_RW(int task_id, int times, std::function<void()> f)
 
 void test(const std::string &arg)
 {
-    if (arg.find("Task") == std::string::npos)
-    {
-        return;
-    }
     auto parts = split(arg, '_');
     int id = std::stoi(parts[0].substr(4));
     int times = std::stoi(parts[1]);
