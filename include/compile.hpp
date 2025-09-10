@@ -62,11 +62,11 @@ class Compiler
     Project _proj;
 };
 
-inline SafeString get_compiler()
+inline auto get_compiler()
 {
     auto exists_in_path = [](const SafeString &exe) {
         wchar_t buffer[MAX_PATH];
-        std::wstring s{exe.wstr()};
+        std::wstring s = exe;
         return SearchPathW(nullptr, s.c_str(), L".exe", MAX_PATH, buffer, nullptr) > 0;
     };
 
