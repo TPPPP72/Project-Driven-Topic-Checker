@@ -4,24 +4,24 @@
 #include "filesys.hpp"
 #include "process.hpp"
 #include <filesystem>
-#include <iostream>
 #include <vector>
 #include <windows.h>
 
 class Compiler
 {
   public:
-    Compiler(const Project &p) : _proj(p)
+    Compiler(const Project &p)
     {
+        _proj = p;
     }
-    std::vector<Win32::Process::ProcessResult> run(const Filesys::WorkingDir &dir)
+    auto run(const Filesys::WorkingDir &dir)
     {
         std::unordered_map<SafeString, std::vector<SafeString>> map = {{"Compiler", {_proj.Compiler}},
                                                                        {"FileList", _proj.Filelist},
                                                                        {"Flag", {_proj.Flag}},
                                                                        {"checker", {"checker.exe"}}};
 
-        std::vector<Win32::Process::ProcessResult> result;
+        std::vector<Win32::Process::Result> result;
         for (auto &item : _proj.CClist)
         {
             auto res = substitute_placeholders_with_args(item, map);
@@ -51,8 +51,7 @@ class Compiler
                     args.emplace_back(str);
                 }
             }
-            std::cout << "编译命令：" << Win32::Process::make_command_line(_proj.Compiler, args) << std::endl;
-            auto cmd_res = _process.run_cmd_env(dir, _proj.Compiler, args);
+            auto cmd_res = _process.run_cmd(dir, _proj.Compiler, args);
             result.emplace_back(cmd_res);
         }
         return result;

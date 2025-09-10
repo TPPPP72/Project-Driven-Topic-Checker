@@ -112,9 +112,9 @@ class SafeString
         return _data == other._data;
     }
 
-    friend bool operator==(const char *lhs, const SafeString &rhs)
+    bool operator==(const char *other)
     {
-        return lhs == rhs;
+        return _data == other;
     }
 
     bool operator<(const SafeString &rhs) const
