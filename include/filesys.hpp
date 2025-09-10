@@ -20,7 +20,8 @@ template <typename T> void exists(const T &path)
     {
         return;
     }
-    throw std::runtime_error(path + " not found!");
+    std::string info{path + " not found!"};
+    throw std::runtime_error(info);
 }
 
 class WorkingDir

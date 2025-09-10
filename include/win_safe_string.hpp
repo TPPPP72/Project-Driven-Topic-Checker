@@ -8,6 +8,7 @@ class SafeString
 {
   public:
     SafeString() = default;
+    ~SafeString() = default;
 
     SafeString(const std::wstring &str)
     {
@@ -19,11 +20,14 @@ class SafeString
         _data = str;
     }
 
-    SafeString(const char *s) : _data(s)
+    SafeString(const char *s)
     {
+        _data = s;
     }
-    SafeString(char c) : _data(1, c)
+    
+    SafeString(char c)
     {
+        _data = c;
     }
 
     auto back() const
@@ -41,8 +45,7 @@ class SafeString
         return _data.size();
     }
 
-    operator const char *() const
-    {
+    operator const char *() const{
         return _data.c_str();
     }
 
@@ -51,9 +54,17 @@ class SafeString
         return _data;
     }
 
+    operator std::string() const{
+        return _data;
+    }
+
     std::wstring wstr() const
     {
         return utf8_to_wstring(_data);
+    }
+
+    operator std::wstring() const{
+        return this->wstr();
     }
 
     auto empty() const
@@ -64,11 +75,6 @@ class SafeString
     auto length() const
     {
         return _data.length();
-    }
-
-    std::filesystem::path path() const
-    {
-        return std::filesystem::path(utf8_to_wstring(_data));
     }
 
     SafeString &operator+=(const SafeString &rhs)
@@ -155,10 +161,14 @@ class SafeString
         s = SafeString(j.get<std::string>());
     }
 
+    std::filesystem::path path() const
+    {
+        return std::filesystem::path(this->wstr());
+    }
+
     operator std::filesystem::path() const
     {
-        return std::filesystem::path(reinterpret_cast<const char8_t *>(_data.data()),
-                                     reinterpret_cast<const char8_t *>(_data.data() + _data.size()));
+        return std::filesystem::path(this->wstr());
     }
 
     const static auto npos = std::string::npos;
@@ -193,7 +203,7 @@ template <> struct hash<SafeString>
 {
     std::size_t operator()(const SafeString &s) const noexcept
     {
-        return std::hash<std::string>()(s.str()); // 使用内部 UTF-8 string 哈希
+        return std::hash<std::string>()(s.str());
     }
 };
 } // namespace std
