@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <vector>
 #include <windows.h>
+#include <iostream>
 
 class Compiler
 {
@@ -29,23 +30,8 @@ class Compiler
             for (auto &item : res.second)
             {
                 std::string str{item};
-                for (auto it = str.begin(); it != str.end(); ++it)
-                {
-                    if (*it != ' ')
-                    {
-                        break;
-                    }
-                    it = str.erase(it);
-                }
-
-                for (auto it = str.end() - 1; it >= str.begin(); --it)
-                {
-                    if (*it != ' ')
-                    {
-                        break;
-                    }
-                    it = str.erase(it);
-                }
+                str.erase(0, str.find_first_not_of(" "));
+                str.erase(str.find_last_not_of(" ") + 1);
                 if (!str.empty())
                 {
                     args.emplace_back(str);
