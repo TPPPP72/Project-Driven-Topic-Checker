@@ -10,7 +10,7 @@ void Checker::single(int id, int num)
 {
     std::cout << "测试Task" << id << ":" << std::endl;
     Win32::Process process;
-    process.run_cmd(_dir, _dir.get_dir("checker.exe"), {std::format("Task{}_{}", id, num)});
+    process.run_cmd(_dir, _dir.get_dir("checker.exe"), {std::format("{}_{}", id, num)});
     std::vector<std::pair<SafeString, SafeString>> check_path;
     for (int i = 1; i <= num; ++i)
     {
