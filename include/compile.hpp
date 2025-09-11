@@ -55,7 +55,6 @@ inline auto set_temp_ev(const std::string &dir)
     std::string newPath = dir + ";" + (oldPath ? oldPath : "");
     free(oldPath);
     SetEnvironmentVariableA("PATH", newPath.c_str());
-    
 }
 
 inline SafeString get_compiler()
@@ -81,8 +80,10 @@ inline SafeString get_compiler()
     common_paths.insert(common_paths.end(), {"C:\\msys64\\ucrt64\\bin\\g++.exe",
                                              "C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\g++.exe"});
 
-    for (const auto &path : common_paths) {
-        if (std::filesystem::exists(path)) {
+    for (const auto &path : common_paths)
+    {
+        if (std::filesystem::exists(path))
+        {
             std::string dir = std::filesystem::path(path).parent_path().string();
             set_temp_ev(dir);
             return path;

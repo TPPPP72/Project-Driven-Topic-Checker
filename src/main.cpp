@@ -6,7 +6,6 @@
 #include <iostream>
 #include <thread>
 
-
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);

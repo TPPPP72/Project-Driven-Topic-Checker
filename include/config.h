@@ -1,10 +1,11 @@
 #pragma once
 
+#include "exit.hpp"
 #include "filesys.hpp"
 #include "json.hpp"
 #include "win_safe_fstream.hpp"
 #include "win_safe_string.hpp"
-#include "exit.hpp"
+
 
 struct Task
 {

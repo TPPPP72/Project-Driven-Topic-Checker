@@ -5,7 +5,6 @@
 #include "../include/process.hpp"
 #include <iostream>
 
-
 void Checker::single(int id, int num)
 {
     std::cout << "测试Task" << id << ":" << std::endl;
