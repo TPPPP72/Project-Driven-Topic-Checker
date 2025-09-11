@@ -47,34 +47,13 @@
 #include <iostream>
 #include <vector>
 
-template <typename T> std::vector<std::string> split(T &&s, char dot = '.')
-{
-    std::vector<std::string> res;
-    std::string temp;
-    for (const auto &item : s)
-    {
-        if (item == dot)
-        {
-            res.emplace_back(std::move(temp));
-            temp.clear();
-            continue;
-        }
-        temp += item;
-    }
-    if (!temp.empty())
-    {
-        res.emplace_back(std::move(temp));
-    }
-    return res;
-}
-
 class Test_File_RW
 {
   public:
     Test_File_RW(int task_id, int times, std::function<void()> f);
     static std::string GetOutput(int task_id)
     {
-        std::string out = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(task_id) + ".out";
+        std::string out = "./test/Task" + std::to_string(task_id) + "/" + std::to_string(1) + ".out";
         return out;
     }
 };
@@ -133,15 +112,20 @@ Test_File_RW::Test_File_RW(int task_id, int times, std::function<void()> f)
 
 void test(const std::string &arg)
 {
-    auto parts = split(arg, '_');
-    int id = std::stoi(parts[0].substr(4));
-    int times = std::stoi(parts[1]);
+    const char dot = '_';
+    int id = std::stoi(arg.substr(0, arg.find(dot)));
+    int times = std::stoi(arg.substr(arg.find(dot) + 1));
     tasks[id - 1](times);
     return;
 }
 ```
 
-`config.json` 的样例：
+`config.json` 的样例：  
+
+这个样例指定了编译时需要包含 `checker.cpp` 文件以及 `player.cpp` 文件，同时开启了`O2` 优化，规定了编译的C++标准为 `C++11` ，且开启了静态编译。  
+
+该样例有 $3$ 个任务：  
+其中任务 $1$ 、 $2$ 具有输入文件，分别具有 $10$ 个以及 $5$ 个测试点；而任务 $3$ 不具有输入文件，只有 $1$ 个测试点。
 
 ```json
 {
@@ -150,52 +134,20 @@ void test(const std::string &arg)
     ],
     "FileList": [
         "checker.cpp",
-        "player.cpp",
-        "monster.cpp",
-        "global.cpp",
-        "npc.cpp",
-        "map.cpp",
-        "item.cpp"
+        "player.cpp"
     ],
     "Flag": "-std=c++11 -O2 -static",
-    "Result": true,
     "Task1": {
         "nums": 10
     },
-    "Task10": {
-        "nums": 10
-    },
-    "Task11": {
-        "nums": 10
-    },
-    "Task12": {
-        "nums": 10
-    },
     "Task2": {
-        "nums": 10
+        "nums": 5
     },
     "Task3": {
-        "nums": 10
+        "nums": 1,
+        "has_input": false
     },
-    "Task4": {
-        "nums": 10
-    },
-    "Task5": {
-        "nums": 10
-    },
-    "Task6": {
-        "nums": 10
-    },
-    "Task7": {
-        "nums": 1
-    },
-    "Task8": {
-        "nums": 10
-    },
-    "Task9": {
-        "nums": 10
-    }
+    "Result": true
 }
-
 ```
 
