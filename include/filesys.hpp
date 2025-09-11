@@ -6,22 +6,23 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 namespace Filesys
 {
-template <typename T> void exists(const T &path)
+template <typename T> bool exists(const T &path)
 {
     if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path))
     {
-        return;
+        return true;
     }
     if (std::filesystem::exists(path) && std::filesystem::is_directory(path))
     {
-        return;
+        return true;
     }
-    std::string info{path + " not found!"};
-    throw std::runtime_error(info);
+    std::cout << path << " 未找到！" << std::endl;
+    return false;
 }
 
 class WorkingDir

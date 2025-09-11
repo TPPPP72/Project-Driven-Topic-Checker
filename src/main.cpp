@@ -1,9 +1,11 @@
 #include "../include/checker.h"
 #include "../include/compile.hpp"
 #include "../include/config.h"
+#include "../include/exit.hpp"
 #include "../include/win_safe_string.hpp"
 #include <iostream>
 #include <thread>
+
 
 int main()
 {
@@ -26,27 +28,44 @@ int main()
     {
         std::cout << "配置文件未指定编译器，正在获取......" << std::endl;
         q.Compiler = get_compiler();
+        autoexit(!q.Compiler.empty());
         std::cout << "编译器获取成功！" << std::endl << std::endl;
+    }
+    else
+    {
+        std::cout << "配置文件指定编译器，检查路径中......" << std::endl;
+        if (Filesys::exists(q.Compiler))
+        {
+            std::cout << "检查通过！" << std::endl << std::endl;
+            set_temp_ev(q.Compiler);
+        }
+        else
+        {
+            std::cout << "检查失败！正在尝试获取编译器......" << std::endl;
+            q.Compiler = get_compiler();
+            autoexit(!q.Compiler.empty());
+            std::cout << "编译器获取成功！" << std::endl << std::endl;
+        }
     }
 
     std::cout << "检查源文件文件列表......" << std::endl;
     for (const auto &item : q.Filelist)
     {
-        Filesys::exists(dir.get_dir(item));
+        autoexit(Filesys::exists(dir.get_dir(item)));
     }
     std::cout << "源文件列表检查通过！" << std::endl << std::endl;
 
     std::cout << "检查测试点数据......" << std::endl;
     for (auto &[k, v] : q.tasks)
     {
-        Filesys::exists(dir.get_dir("test\\" + k.str()));
+        autoexit(Filesys::exists(dir.get_dir("test\\" + k.str())));
         for (int i = 1; i <= v.nums; ++i)
         {
             if (v.has_input)
             {
-                Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".in"));
+                autoexit(Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".in")));
             }
-            Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".ans"));
+            autoexit(Filesys::exists(dir.get_dir("test\\" + k.str() + "\\" + std::to_string(i) + ".ans")));
         }
     }
     std::cout << "测试点数据检查通过！" << std::endl << std::endl;

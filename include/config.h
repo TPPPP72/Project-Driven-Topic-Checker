@@ -4,6 +4,7 @@
 #include "json.hpp"
 #include "win_safe_fstream.hpp"
 #include "win_safe_string.hpp"
+#include "exit.hpp"
 
 struct Task
 {
@@ -105,7 +106,7 @@ template <typename T> class Config
     }
     void init()
     {
-        Filesys::exists(_dir.get_dir(_path));
+        autoexit(Filesys::exists(_dir.get_dir(_path)));
         SafeIfstream rd(_dir.get_dir("config.json"));
         nlohmann::json j;
         rd >> j;
