@@ -87,5 +87,5 @@ int main()
             Checker{dir, q}.run();
         }
     }
-    system("pause>nul");
+    std::cin.get();
 }
