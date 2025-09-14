@@ -6,11 +6,12 @@
 #include "win_safe_fstream.hpp"
 #include "win_safe_string.hpp"
 
-
 struct Task
 {
+    SafeString test_point_name;
     int nums;
     bool has_input;
+    bool has_output;
 };
 
 struct Project
@@ -20,7 +21,9 @@ struct Project
     std::vector<SafeString> CClist;
     std::vector<SafeString> Filelist;
     std::map<SafeString, Task> tasks;
-    bool result = false;
+    SafeString Test_dir;
+    SafeString Task_name;
+    bool Generate_result = false;
 };
 
 void to_json(nlohmann::json &j, const Task &t);
