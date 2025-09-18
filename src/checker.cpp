@@ -54,7 +54,7 @@ void Checker::all()
     {
         single(i, _proj.tasks["Task" + std::to_string(i)].nums);
     }
-    if (_proj.result)
+    if (_proj.Generate_result)
         getresultzip();
 }
 
